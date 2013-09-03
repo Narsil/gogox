@@ -5,10 +5,16 @@ import (
 	"time"
 	"os"
     "fmt"
+    "syscall"
 )
 
 func Init () (gox *StreamingApi){
-    gox, err := NewFromConfig(os.ExpandEnv("$HOME/.mtgox"))
+    filename := os.ExpandEnv("$MTGOX_CONFIG")
+    if filename == ""{
+        fmt.Println("Please set $MTGOX_CONFIG to a proper configuration file")
+        syscall.Exit(0)
+    }
+    gox, err := NewFromConfig(filename)
 	if err != nil {
 		panic(err)
 	}
