@@ -288,7 +288,7 @@ func (api *StreamingApi) HandleErrors(f func(error)){
         }
     }()
 }
-func (api *StreamingApi) SubmitOrder(typ string, amount, price uint64) chan []Order {
+func (api *StreamingApi) SubmitOrder(typ string, amount, price int64) chan []Order {
     api.call("order/add", map[string]interface{}{
         "type":       typ,
         "amount_int": amount,
