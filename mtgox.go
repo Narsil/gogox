@@ -16,21 +16,11 @@ import (
 	"io/ioutil"
 )
 
-type StreamType string
-type OrderType string
-
 const (
 	api_host      string = "wss://websocket.mtgox.com:443"
 	api_path      string = "/mtgox"
 	http_endpoint string = "http://mtgox.com/api/2"
 	origin_url    string = "http://localhost"
-
-	TICKER StreamType = "ticker"
-	DEPTH  StreamType = "depth"
-	TRADES StreamType = "trades"
-
-	BID OrderType = "bid"
-	ASK OrderType = "ask"
 )
 
 type StreamingApi struct {
@@ -298,10 +288,11 @@ func (api *StreamingApi) HandleErrors(f func(error)){
         }
     }()
 }
-func (api *StreamingApi) SubmitOrder(typ string, amount, price uint64) (chan *CallResult, error) {
-    return api.call("order/add", map[string]interface{}{
+func (api *StreamingApi) SubmitOrder(typ string, amount, price uint64) chan []Order {
+    api.call("order/add", map[string]interface{}{
         "type":       typ,
         "amount_int": amount,
         "interfaceprice_int":  price,
     })
+    return api.Orders
 }
